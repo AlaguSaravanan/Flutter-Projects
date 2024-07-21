@@ -1,4 +1,4 @@
-import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,214 +6,220 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/calculator.dart';
 import '../widgets/Info_card.dart';
 
-class BMIPage extends StatefulWidget {
+class BmiPage extends StatefulWidget {
+  const BmiPage({super.key});
+
   @override
-  State<StatefulWidget> createState() {
-    return _BMIPageState();
-  }
+  State<BmiPage> createState() => _BmiPageState();
 }
 
-class _BMIPageState extends State<BMIPage> {
-  double? _deviceHeight, _deviceWidth;
-
-  int _age = 25, _weight = 160, _height = 70, _gender = 0;
+class _BmiPageState extends State<BmiPage> {
+  double? _deviceWidth;
+  double? _deviceHeight;
+  int _age = 20, _height = 160, _weight = 65, _gender = 0;
 
   @override
   Widget build(BuildContext context) {
-    _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
+    _deviceHeight = MediaQuery.of(context).size.height;
     return CupertinoPageScaffold(
       child: Center(
-        child: Container(
-          height: _deviceHeight! * 0.85,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _ageSelectContainer(),
-                  _weightSelectContainer(),
-                ],
-              ),
-              _heightSelectContainer(),
-              _genderSelectContainer(),
-              _calculateBMIButton(),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _ageSelectWidget(),
+                _weightSelectWidget(),
+              ],
+            ),
+            _heightSelectWidget(),
+            _genderSelectWidget(),
+            CupertinoButton.filled(
+              child: const Text('Calculate BMI'),
+              onPressed: () {
+                if (_age > 0 && _weight > 0 && _height > 0) {
+                  double _bmi = calculateBMI(_height, _weight);
+                  _showBmiWidget(_bmi);
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _ageSelectContainer() {
+  Widget _ageSelectWidget() {
     return InfoCard(
-      height: _deviceHeight! * 0.20,
       width: _deviceWidth! * 0.45,
+      height: _deviceHeight! * 0.20,
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
-            'Age yr',
+            'Age yrs',
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
           Text(
             _age.toString(),
             style: const TextStyle(
-              fontSize: 45,
-              fontWeight: FontWeight.w700,
+              fontSize: 50,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                width: 50,
-                child: CupertinoDialogAction(
-                  key: const Key('age_minus'),
-                  onPressed: () {
-                    setState(() {
-                      _age--;
-                    });
-                  },
-                  textStyle: const TextStyle(
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _age--;
+                  });
+                },
+                child: const Text(
+                  '-',
+                  style: TextStyle(
                     fontSize: 25,
+                    fontWeight: FontWeight.w500,
                     color: Colors.red,
                   ),
-                  child: const Text('-'),
                 ),
               ),
-              SizedBox(
-                width: 50,
-                child: CupertinoDialogAction(
-                  key: const Key('age_plus'),
-                  onPressed: () {
-                    setState(
-                      () {
-                        _age++;
-                      },
-                    );
-                  },
-                  textStyle: const TextStyle(
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _age++;
+                  });
+                },
+                child: const Text(
+                  '+',
+                  style: TextStyle(
                     fontSize: 25,
+                    fontWeight: FontWeight.w500,
                     color: Colors.blue,
                   ),
-                  child: const Text('+'),
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _weightSelectContainer() {
+  Widget _weightSelectWidget() {
     return InfoCard(
-      height: _deviceHeight! * 0.20,
       width: _deviceWidth! * 0.45,
+      height: _deviceHeight! * 0.20,
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
-            'Weight lbs',
+            'Weight kgs',
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
           Text(
             _weight.toString(),
             style: const TextStyle(
-              fontSize: 45,
-              fontWeight: FontWeight.w700,
+              fontSize: 50,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                width: 50,
-                child: CupertinoDialogAction(
-                  key: const Key('weight_minus'),
-                  onPressed: () {
-                    setState(() {
-                      _weight--;
-                    });
-                  },
-                  textStyle: const TextStyle(
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _weight--;
+                  });
+                },
+                child: const Text(
+                  '-',
+                  style: TextStyle(
                     fontSize: 25,
+                    fontWeight: FontWeight.w500,
                     color: Colors.red,
                   ),
-                  child: const Text('-'),
                 ),
               ),
-              SizedBox(
-                width: 50,
-                child: CupertinoDialogAction(
-                  key: const Key('weight_plus'),
-                  onPressed: () {
-                    setState(
-                      () {
-                        _weight++;
-                      },
-                    );
-                  },
-                  textStyle: const TextStyle(
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _weight++;
+                  });
+                },
+                child: const Text(
+                  '+',
+                  style: TextStyle(
                     fontSize: 25,
+                    fontWeight: FontWeight.w500,
                     color: Colors.blue,
                   ),
-                  child: const Text('+'),
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _heightSelectContainer() {
+  Widget _heightSelectWidget() {
     return InfoCard(
-      height: _deviceHeight! * 0.18,
       width: _deviceWidth! * 0.90,
+      height: _deviceHeight! * 0.15,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
-            'Height in',
+            'Height cms',
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
           Text(
             _height.toString(),
             style: const TextStyle(
-              fontSize: 45,
+              fontSize: 35,
               fontWeight: FontWeight.w700,
+              color: Colors.black,
             ),
           ),
           SizedBox(
             width: _deviceWidth! * 0.80,
             child: CupertinoSlider(
+              max: 272,
               min: 0,
-              max: 96,
-              divisions: 96,
+              divisions: 272,
               value: _height.toDouble(),
               onChanged: (_value) {
                 setState(() {
@@ -227,10 +233,10 @@ class _BMIPageState extends State<BMIPage> {
     );
   }
 
-  Widget _genderSelectContainer() {
+  Widget _genderSelectWidget() {
     return InfoCard(
-      height: _deviceHeight! * 0.11,
       width: _deviceWidth! * 0.90,
+      height: _deviceHeight! * 0.11,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -239,54 +245,37 @@ class _BMIPageState extends State<BMIPage> {
           const Text(
             'Gender',
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
           CupertinoSlidingSegmentedControl(
-            groupValue: _gender,
-            children: const {
-              0: Text("Male"),
-              1: Text("Female"),
-            },
-            onValueChanged: (_value) {
-              setState(() {
-                _gender = _value as int;
-              });
-            },
-          ),
+              groupValue: _gender,
+              children: const {
+                0: Text('Male'),
+                1: Text('Female'),
+              },
+              onValueChanged: (_value) {
+                setState(() {
+                  _gender = _value as int;
+                });
+              })
         ],
       ),
     );
   }
 
-  Widget _calculateBMIButton() {
-    return Container(
-      height: _deviceHeight! * 0.07,
-      child: CupertinoButton.filled(
-        child: const Text(
-          "Calculate BMI",
-        ),
-        onPressed: () {
-          if (_height > 0 && _weight > 0 && _age > 0) {
-            double _bmi = calculateBMI(_height, _weight);
-            _showResultDialog(_bmi);
-          }
-        },
-      ),
-    );
-  }
-
-  void _showResultDialog(double _bmi) {
+  void _showBmiWidget(double _bmi) {
     String? _status;
     if (_bmi < 18.5) {
-      _status = "Underweight";
-    } else if (_bmi >= 18.5 && _bmi < 25) {
-      _status = "Normal";
-    } else if (_bmi >= 25 && _bmi < 30) {
-      _status = "Overweight";
+      _status = 'UnderWeight';
+    } else if (_bmi > 18.5 && _bmi < 25) {
+      _status = 'Normal';
+    } else if (_bmi > 25 && _bmi < 30) {
+      _status = 'OverWeigth';
     } else if (_bmi >= 30) {
-      _status = "Obese";
+      _status = 'Obese';
     }
     showCupertinoDialog(
       context: context,
@@ -298,7 +287,7 @@ class _BMIPageState extends State<BMIPage> {
           ),
           actions: [
             CupertinoDialogAction(
-              child: const Text('Ok'),
+              child: const Text('OK'),
               onPressed: () {
                 _saveResult(_bmi.toString(), _status!);
                 Navigator.pop(_context);

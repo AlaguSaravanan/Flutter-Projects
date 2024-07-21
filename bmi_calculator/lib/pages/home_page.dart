@@ -1,19 +1,20 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'bmi_page.dart';
 import 'history_page.dart';
 
-
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
-  State<StatefulWidget> createState() {
-    return _HomePageState();
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final List<Widget> _tabs = [
-    BMIPage(),
+    BmiPage(),
     HistoryPage(),
   ];
 
@@ -21,28 +22,27 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
-        middle: Text('IBMI'),
+        middle: Text('BMI'),
       ),
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
           items: const [
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.home),
-              label: "BMI",
+              label: 'BMI',
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.person),
-              label: "History",
+              label: 'History',
             ),
           ],
-        ),
-        tabBuilder: (context, index) {
-          return CupertinoTabView(
-            builder: (context) {
-              return _tabs[index];
-            },
-          );
-        },
+        ), tabBuilder: (BuildContext context, int index) {
+        return CupertinoTabView(
+          builder: (context){
+            return _tabs[index];
+          },
+        );
+      },
       ),
     );
   }

@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class InfoCard extends StatelessWidget {
+  const InfoCard(
+      {super.key,
+        required this.child,
+        required this.width,
+        required this.height});
+
   final Widget child;
   final double width, height;
-
-  const InfoCard({
-    required this.height,
-    required this.width,
-    required this.child,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +16,14 @@ class InfoCard extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 5,
-          )
-        ],
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 5,
+            )
+          ]),
       child: child,
     );
   }
