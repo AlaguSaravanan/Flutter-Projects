@@ -1,5 +1,5 @@
-import 'package:calcy/pages/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:taskly/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,13 +10,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Calculator',
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromRGBO(245, 245, 245, 1.0),
-      ),
-      home: const HomePage(),
+      title: 'ToDo',
+      home: HomeScreen(),
     );
   }
 }
+
+

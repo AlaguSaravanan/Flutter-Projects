@@ -1,5 +1,5 @@
-import 'package:calcy/pages/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:news/pages/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,16 +7,17 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Calculator',
+      title: 'Flutter Demo',
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromRGBO(245, 245, 245, 1.0),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const Home(),
     );
   }
 }
+
