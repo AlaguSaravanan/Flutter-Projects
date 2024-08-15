@@ -70,7 +70,7 @@ Taskly is a comprehensive task management app designed to help users organize an
 - Task Completion: Check off tasks to mark them as completed, which will move them to the Completed section.
 - User-Friendly Interface: Features an easy-to-use interface for adding, editing, and managing tasks efficiently.
   
-### 5. Trivia 
+### 5. Frivia (Trivia App)
 <div style="display: flex; justify-content: space-between;">
     <img src="screenshots/trivia-1.jpg" alt="Trivia Screenshot 1" width="30%">
     <img src="screenshots/trivia-2.jpg" alt="Trivia Screenshot 2" width="30%">
